@@ -10,7 +10,7 @@ load_dotenv()
 
 TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
 WEBHOOK_PATH = f"/webhook/{TOKEN}"          # Unique path for security
-WEBHOOK_URL = f"{os.environ['VERCEL_URL']}{WEBHOOK_PATH}"
+WEBHOOK_URL = f"https://{os.environ['VERCEL_URL']}{WEBHOOK_PATH}"
 print(WEBHOOK_URL)
 
 app = FastAPI()
