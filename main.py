@@ -2,8 +2,9 @@ import os
 from fastapi import FastAPI, Request
 
 from dotenv import load_dotenv
-
-from core.bot import main, bot, dp
+from aiogram.types import Update
+from core.bot import main, bot, dp, MODEL_PATH
+from prepare_model import verify_model_exists
 
 load_dotenv()
 
@@ -15,11 +16,11 @@ WEBHOOK_URL = f"{os.environ['VERCEL_URL']}{WEBHOOK_PATH}"
 app = FastAPI()
 
 
-# Webhook endpoint for Telegram
 @app.post(WEBHOOK_PATH)
 async def telegram_webhook(req: Request):
-    update = await req.json()
-    await dp.feed_update(update)
+    data = await req.json()
+    update = Update(**data)  # Convert JSON to Update object
+    await dp.feed_update(bot, update)  # now it works
     return {"ok": True}
 
 
@@ -29,8 +30,11 @@ async def on_startup():
     print("🤖 Setting webhook...")
     await bot.delete_webhook()
     await bot.set_webhook(WEBHOOK_URL)
-
-    await main()
+    
+    print("Configuring model...")
+    verify_model_exists(MODEL_PATH)
+    
+    # await main()
 
 
 @app.on_event("shutdown")

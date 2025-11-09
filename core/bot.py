@@ -16,6 +16,7 @@ dp = Dispatcher()
 SAVE_DIR = "voices"
 os.makedirs(SAVE_DIR, exist_ok=True)
 
+MODEL_PATH = "vosk-model-small-uk-v3-small"
 
 @dp.message(F.voice)
 async def handle_voice(message: Message):
@@ -33,7 +34,7 @@ async def handle_voice(message: Message):
     try:
         wav_path = convert_ogg_to_wav(ogg_path)
         os.remove(ogg_path)
-        text = get_text_from_audio_file(wav_path, "vosk-model-small-uk-v3-small")
+        text = get_text_from_audio_file(wav_path, MODEL_PATH)
         # os.remove(wav_path)
         await message.answer(f"🔍 Transcribed text: `{text}`", parse_mode=ParseMode.MARKDOWN)
     except Exception as e:
