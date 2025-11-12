@@ -1,7 +1,9 @@
+from loguru import logger
 from pydub import AudioSegment
 
 
 def convert_ogg_to_wav(file_path: str, **kwargs):
+    logger.info("Converting ogg to wav")
     sound = AudioSegment.from_file(file_path, format="ogg")
 
     sound = sound.set_frame_rate(kwargs.get("frame_rate", 16000))   # 16kHz

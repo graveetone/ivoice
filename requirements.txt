@@ -15,6 +15,7 @@ fastapi==0.121.1
 frozenlist==1.8.0
 h11==0.16.0
 idna==3.11
+loguru==0.7.3
 magic-filter==1.0.12
 multidict==6.7.0
 propcache==0.4.1

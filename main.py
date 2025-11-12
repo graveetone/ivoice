@@ -5,13 +5,14 @@ from dotenv import load_dotenv
 from aiogram.types import Update
 from core.bot import main, bot, dp, MODEL_PATH
 from prepare_model import verify_model_exists
+from loguru import logger
 
 load_dotenv()
 
 TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
 WEBHOOK_PATH = f"/webhook/{TOKEN}"          # Unique path for security
 WEBHOOK_URL = f"https://{os.environ['VERCEL_URL']}{WEBHOOK_PATH}"
-print(WEBHOOK_URL)
+logger.info(f"{WEBHOOK_URL=}")
 
 app = FastAPI()
 
@@ -32,11 +33,11 @@ async def telegram_webhook(req: Request):
 @app.on_event("startup")
 async def on_startup():
     try:
-        print("🤖 Setting webhook...")
+        logger.info("🤖 Setting webhook...")
         await bot.delete_webhook()
         await bot.set_webhook(WEBHOOK_URL)
         
-        print("Configuring model...")
+        logger.info("Configuring model...")
         verify_model_exists(MODEL_PATH)
     except Exception as e:
         import logging
@@ -46,5 +47,5 @@ async def on_startup():
 
 @app.on_event("shutdown")
 async def on_shutdown():
-    print("🤖 Deleting webhook...")
+    logger.info("🤖 Deleting webhook...")
     await bot.delete_webhook()

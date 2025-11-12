@@ -3,6 +3,7 @@ from datetime import datetime
 from aiogram import Bot, Dispatcher, F
 from aiogram.types import Message
 from aiogram.enums import ParseMode
+from loguru import logger
 from core.converter import convert_ogg_to_wav
 from core.transcriber import get_text_from_audio_file
 from dotenv import load_dotenv
@@ -10,7 +11,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 bot = Bot(token=os.environ["TELEGRAM_BOT_TOKEN"])
-print(os.environ)
+logger.info(os.environ)
 dp = Dispatcher()
 
 SAVE_DIR = "voices"
@@ -23,7 +24,7 @@ async def handle_voice(message: Message):
     """Download voice message, convert from OGG to WAV, and save."""
     sent_message = await message.answer("🤔 Processing...")
     user = message.from_user
-    print(f"Got new voice message from {user.username}")
+    logger.info(f"Got new voice message from {user.username}")
     file_info = await bot.get_file(message.voice.file_id)
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -48,5 +49,5 @@ async def handle_voice(message: Message):
 
 
 async def main():
-    print("🤖 Bot is running...")
+    logger.success("🤖 Bot is running...")
     await dp.start_polling(bot)

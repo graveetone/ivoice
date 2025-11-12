@@ -1,8 +1,10 @@
 import json
 import wave
+from loguru import logger
 from vosk import Model, KaldiRecognizer
 
 def get_text_from_audio_file(audio_file_path: str, vosk_model_path: str):
+    logger.info("Extracting text from audio file")
     model = Model(vosk_model_path)
     wf = wave.open(audio_file_path, "rb")
 
