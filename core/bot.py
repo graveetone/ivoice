@@ -21,6 +21,7 @@ MODEL_PATH = "vosk-model-small-uk-v3-small"
 @dp.message(F.voice)
 async def handle_voice(message: Message):
     """Download voice message, convert from OGG to WAV, and save."""
+    sent_message = await message.answer("🤔 Processing...")
     user = message.from_user
     print(f"Got new voice message from {user.username}")
     file_info = await bot.get_file(message.voice.file_id)
@@ -36,7 +37,12 @@ async def handle_voice(message: Message):
         os.remove(ogg_path)
         text = get_text_from_audio_file(wav_path, MODEL_PATH)
         # os.remove(wav_path)
-        await message.answer(f"🔍 Transcribed text: `{text}`", parse_mode=ParseMode.MARKDOWN)
+        await bot.edit_message_text(
+            chat_id=message.chat.id,
+            message_id=sent_message.message_id,
+            text=f"🔍 Transcribed text: `{text}`",
+            parse_mode=ParseMode.MARKDOWN,
+        )
     except Exception as e:
         await message.answer(f"❌ Error processing voice message: {e}")
 
