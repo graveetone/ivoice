@@ -14,10 +14,10 @@ bot = Bot(token=os.environ["TELEGRAM_BOT_TOKEN"])
 logger.info(os.environ)
 dp = Dispatcher()
 
-SAVE_DIR = "voices"
+SAVE_DIR = "/tmp/voices"
 os.makedirs(SAVE_DIR, exist_ok=True)
 
-MODEL_PATH = "vosk-model-small-uk-v3-small"
+MODEL_PATH = "/tmp/vosk-model-small-uk-v3-small"
 
 @dp.message(F.voice)
 async def handle_voice(message: Message):
